@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
+    <script src="{% static 'js/materialize.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}" ></script>
+
+</head>
+<body>
+
+    <nav>
+        <div class="nav-wrapper black">
+          <a href="#" class="brand-logo center">{{room}} - Chatroom</a>
+        </div>
+    </nav>
+    <br>
+
+    <div id="display" class="display">
+        
+    </div>
+
+<script>
+    $(document).ready(function(){
+       
+    setInterval(function(){
+        $.ajax({
+        type: 'GET',
+        url : "/getMessages/{{room}}/",
+        success: function(response){
+            console.log(response);
+            $("#display").empty();
+            for (var key in response.messages)
+            {
+                var temp="<div class='container grey'><b>"+response.messages[key].user+"</b><p>"+response.messages[key].value+"</p><span class='left-align'>"+response.messages[key].date+"</span></div>";
+                $("#display").append(temp);
+            }
+        },
+        error: function(response){
+            //alert('An error occured')
+        }
+    });
+    },1000);
+    })
+</script>
+
+    
+    <div class="section">
+        
+        <div class="container">
+
+            <form id="post-form">
+                {% csrf_token %}
+                <input type="hidden" name="username"  id="username" value="{{username}}">
+                <input type="hidden" name="room_id"  id="room_id" value="{{room_details.id}}">
+                <input type="text" name="message" id="message">
+                <div class="row center">
+                    <input type="submit" class="btn center-align" value="send">
+                </div>
+
+            </form>
+            
+        </div>
+
+    </div>
+
+
+</body>
+<script type="text/javascript">
+    $(document).on('submit','#post-form',function(e){
+      e.preventDefault();
+  
+      $.ajax({
+        type:'POST',
+        url:'/send',
+        data:{
+            username:$('#username').val(),
+            room_id:$('#room_id').val(),
+            message:$('#message').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function(data){
+           alert(data)
+        }
+      });
+      document.getElementById('message').value = ''
+    });
+</script>
+  
+</html>

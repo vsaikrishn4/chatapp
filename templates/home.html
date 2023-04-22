@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>Chatroom</title>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link rel="stylesheet" href="{% static 'css/materialize.min.css' %}">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body>
+        
+        <nav>
+            <div class="nav-wrapper black">
+              <a href="#" class="brand-logo center">Chatroom</a>
+            </div>
+        </nav>
+
+        <div class="section">
+            
+          <div class="container valign-wrapper">
+            <div class="row">
+              <form id="post-form" method="POST" action="checkview" class="col s12">
+                {% csrf_token %}
+                <div class="row">
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">alternate_email</i>
+                    <input id="room_id" name="room_id" type="text" class="validate">
+                    <label for="room_id">Room ID</label>
+                  </div>
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">account_circle</i>
+                    <input id="username" name="username" type="text" required class="validate">
+                    <label for="username">User Name</label>
+                  </div>
+                  <div class="row center">
+                    <input type="submit" value="Enter Room" class="btn center-align black">
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>          
+
+        </div>
+
+      <script src="{% static 'js/materialize.min.js' %}"></script>
+    </body>
+  </html>
